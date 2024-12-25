@@ -25,10 +25,3 @@ void ACSWuxiaCharacterBase::Tick(float DeltaTime)
 
 }
 
-// Called to bind functionality to input
-void ACSWuxiaCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-

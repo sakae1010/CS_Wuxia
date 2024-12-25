@@ -44,7 +44,7 @@ private:
 	void InputTagReleased(const FGameplayTag InputTag);
 	void InputTagHeld(const FGameplayTag InputTag);
 
-	// void Move(const FInputActionValue& InputActionValue);
+	void Move(const FInputActionValue& InputActionValue);
 };
 
 
