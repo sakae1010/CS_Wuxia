@@ -6,6 +6,7 @@
 #include "Character/CSWuxiaCharacterBase.h"
 #include "CSWuxiaCharacter.generated.h"
 
+class UWidgetComponent;
 class USpringArmComponent;
 class UCameraComponent;
 struct FInputActionValue;
@@ -22,8 +23,9 @@ public:
 	ACSWuxiaCharacter();
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
 
-
+	
 private:
 
 	UPROPERTY(VisibleAnywhere)

@@ -6,11 +6,22 @@
 #include "GameFramework/PlayerController.h"
 #include "CSWuxiaPlayerController.generated.h"
 
+class USplineComponent;
+class UNiagaraSystem;
 struct FGameplayTag;
 class UCSWuxiaInputConfig;
 struct FInputActionValue;
 class UInputAction;
 class UInputMappingContext;
+
+enum class ETargetingStatus : uint8
+{
+	TargetingEnemy,
+	TargetingNonEnemy,
+	NotTargeting
+};
+
+
 /**
  * 
  */
@@ -45,6 +56,28 @@ private:
 	void InputTagHeld(const FGameplayTag InputTag);
 
 	void Move(const FInputActionValue& InputActionValue);
+
+	void CursorTrace();
+	TObjectPtr<AActor> LastActor;
+	TObjectPtr<AActor> ThisActor;
+	FHitResult CursorHit;
+	static void HightlightActor(AActor* Actor);
+	static void UnHightlightActor(AActor* Actor);
+
+	/*  click auto move */
+	FVector CachedDestination = FVector::ZeroVector;
+	float FollowTime = 0.0f;
+	float ShortPressThreshold = 0.5f;
+	bool bAutoRunning = false;
+	ETargetingStatus TargetingStatus =ETargetingStatus::NotTargeting;
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAcceptanceRadius = 50.0f;
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USplineComponent> SplineComponent;
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UNiagaraSystem> ClickEffect;
+	void AutoRun();
+	/*  click auto move */
 };
 
 

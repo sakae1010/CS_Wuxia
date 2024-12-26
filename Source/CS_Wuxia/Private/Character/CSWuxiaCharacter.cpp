@@ -30,6 +30,7 @@ ACSWuxiaCharacter::ACSWuxiaCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
+	
 }
 
 void ACSWuxiaCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
