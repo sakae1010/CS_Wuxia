@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "HightlightInterface.generated.h"
+#include "InteractableInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI, BlueprintType)
-class UHightlightInterface : public UInterface
+UINTERFACE(MinimalAPI)
+class UInteractableInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,22 +16,17 @@ class UHightlightInterface : public UInterface
 /**
  * 
  */
-class CS_WUXIA_API IHightlightInterface
+class CS_WUXIA_API IInteractableInterface
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	//顯示或隱藏互動 UI
 	
-	virtual UMaterialInterface* GetOutlineMaterialInstance();
+	UFUNCTION(BlueprintNativeEvent)
+	void ShowInteractionWidget(); 
 
 	UFUNCTION(BlueprintNativeEvent)
-	void HighlightActor() ;
-	
-	UFUNCTION(BlueprintNativeEvent)
-	void UnHighlightActor();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void MoveToLocation(FVector& OutLocation);
-	
+	void HideInteractionWidget() ;
 };

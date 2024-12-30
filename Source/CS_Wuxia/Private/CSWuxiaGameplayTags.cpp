@@ -43,12 +43,26 @@ void FCSWuxiaGameplayTags::InitializeNativeGameplayTags()
 		FString("6 Key"));
 
 	
-	// GameplayTags.InputTag_Passive_1 = GameplayTagsManager.AddNativeGameplayTag(
-	// 	FName("InputTag.Passive.1"),
-	// 	FString("Input Tag Passive 1 Ability"));
-	//
-	// GameplayTags.InputTag_Passive_2 = GameplayTagsManager.AddNativeGameplayTag(
-	// 	FName("InputTag.Passive.2"),
-	// 	FString("Input Tag Passive 2 Ability"));
+	GameplayTags.Attribute_Base_Attack = GameplayTagsManager.AddNativeGameplayTag(
+		FName("Attribute.Base.Attack"),
+		FString("Attack"));
+	GameplayTags.Attribute_Base_Health = GameplayTagsManager.AddNativeGameplayTag(
+		FName("Attribute.Base.Health"),
+		FString("Health"));
+	GameplayTags.Attribute_Base_MaxHealth = GameplayTagsManager.AddNativeGameplayTag(
+		FName("Attribute.Base.MaxHealth"),
+		FString("MaxHealth"));
+	GameplayTags.Attribute_Base_ActionPoint = GameplayTagsManager.AddNativeGameplayTag(
+		FName("Attribute.Base.ActionPoint"),
+		FString("ActionPoint"));
+	GameplayTags.Attribute_Base_MaxActionPoint = GameplayTagsManager.AddNativeGameplayTag(
+		FName("Attribute.Base.MaxActionPoint"),
+		FString("MaxActionPoint"));
+	GameplayTags.Attribute_Base_Defense = GameplayTagsManager.AddNativeGameplayTag(
+		FName("Attribute.Base.Defense"),
+		FString("Defense"));
+	GameplayTags.Attribute_Base_DistancePerAP = GameplayTagsManager.AddNativeGameplayTag(
+		FName("Attribute.Base.DistancePerAP"),
+		FString("DistancePerAP"));
 	
 }
