@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "CSWuxiaPlayerController.generated.h"
 
+class UShowNameWidget;
 class USplineComponent;
 class UNiagaraSystem;
 struct FGameplayTag;
@@ -34,7 +35,8 @@ public:
 	ACSWuxiaPlayerController();
 	
 	virtual void PlayerTick(float DeltaTime) override;
-
+	UPROPERTY(EditDefaultsOnly,Category="Input")
+	FVector2D OffsetMousePosition;
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -50,6 +52,9 @@ private:
 	
 	UPROPERTY(EditAnywhere,Category="Input")
 	TObjectPtr<UInputAction> MoveAction;
+	
+	UPROPERTY(EditAnywhere,Category="Input")
+	TObjectPtr<UShowNameWidget> ShowNameWidget;
 
 	void InputTagPressed(const FGameplayTag InputTag);
 	void InputTagReleased(const FGameplayTag InputTag);
@@ -63,6 +68,7 @@ private:
 	FHitResult CursorHit;
 	static void HightlightActor(AActor* Actor);
 	static void UnHightlightActor(AActor* Actor);
+	void ShowActorDisplayName() const;
 
 	/*  click auto move */
 	FVector CachedDestination = FVector::ZeroVector;
@@ -76,6 +82,7 @@ private:
 	TObjectPtr<USplineComponent> SplineComponent;
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UNiagaraSystem> ClickEffect;
+	
 	void AutoRun();
 	/*  click auto move */
 };

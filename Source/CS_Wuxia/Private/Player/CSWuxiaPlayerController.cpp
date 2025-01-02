@@ -1,4 +1,4 @@
-// Copyright CS_WUXIA 
+﻿// Copyright CS_WUXIA 
 
 
 #include "Player/CSWuxiaPlayerController.h"
@@ -9,9 +9,12 @@
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/SplineComponent.h"
 #include "Input/CSWuxiaInputComponent.h"
 #include "Interface/HightlightInterface.h"
+#include "Interface/InteractableInterface.h"
+#include "UI/Widget/ShowNameWidget.h"
 
 class UNavigationPath;
 
@@ -23,11 +26,18 @@ void ACSWuxiaPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	bShowMouseCursor = true;
+
+	if (ShowNameWidget)
+	{
+		ShowNameWidget->AddToViewport();
+		ShowNameWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 void ACSWuxiaPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick( DeltaTime );
 	CursorTrace();
+	ShowActorDisplayName();
 	AutoRun();
 }
 
@@ -168,6 +178,38 @@ void ACSWuxiaPlayerController::UnHightlightActor(AActor* Actor)
 	if(IsValid(Actor)&& Actor->Implements<UHightlightInterface>())
 	{
 		IHightlightInterface::Execute_UnHighlightActor(Actor);
+	}
+}
+
+void ACSWuxiaPlayerController::ShowActorDisplayName() const
+{
+	if(IsValid(ThisActor)&& ThisActor->Implements<UInteractableInterface>())
+	{
+		
+		if(!IsValid(ShowNameWidget))
+		{
+			return;
+		}
+		
+		if ( !ShowNameWidget->IsVisible() )
+		{
+			FName ActorName = IInteractableInterface::Execute_GetActorName( ThisActor );
+			// ShowNameWidget->SetVisibility(ESlateVisibility::Visible);
+			ShowNameWidget->SetVisibility( ESlateVisibility::HitTestInvisible );
+			ShowNameWidget->SetOffsetMousePosition( OffsetMousePosition );
+			if (ActorName.IsNone())
+			{
+				ActorName = FName(TEXT("#徐鳳年#"));
+			}
+			FText Text = FText::FromName( ActorName );
+			ShowNameWidget->SetNameText( Text );
+		}
+
+	}
+	else
+	{
+		if(!IsValid(ShowNameWidget))return;
+		ShowNameWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 

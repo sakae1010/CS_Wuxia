@@ -14,7 +14,15 @@ UCLASS()
 class CS_WUXIA_API UCSWuxiaGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
+	
+public:
+	UCSWuxiaGameInstance();
+	FName GetStringTable(const FName& TableId, const FString& RowId) const;
 
 public:
-	
+	UPROPERTY(EditDefaultsOnly, Category = "StringTable")
+	TArray<TObjectPtr<UStringTable>> StringTables;
+
+private:
+
 };

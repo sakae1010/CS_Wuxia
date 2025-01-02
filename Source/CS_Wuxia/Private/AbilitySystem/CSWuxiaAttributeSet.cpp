@@ -4,6 +4,7 @@
 #include "AbilitySystem/CSWuxiaAttributeSet.h"
 
 #include "CSWuxiaGameplayTags.h"
+#include "Data/CharacterRow.h"
 
 UCSWuxiaAttributeSet::UCSWuxiaAttributeSet()
 {
@@ -15,6 +16,18 @@ UCSWuxiaAttributeSet::UCSWuxiaAttributeSet()
 	TagsToAttributeMap.Add(Tags.Attribute_Base_ActionPoint, GetActionPointAttribute);
 	TagsToAttributeMap.Add(Tags.Attribute_Base_MaxActionPoint, GetMaxActionPointAttribute);
 	TagsToAttributeMap.Add(Tags.Attribute_Base_DistancePerAP, GetDistancePerAPAttribute);
+}
+
+void UCSWuxiaAttributeSet::InitializeAttributesFromRow(const FCharacterRow& CharacterRow)
+{
+	//TODO　Load data form SaveGame
+	SetAttack(CharacterRow.Attack);
+	SetDefense(CharacterRow.Defense);
+	SetHealth(CharacterRow.HP);
+	SetMaxHealth(CharacterRow.HP);
+	SetActionPoint(BaseActionPoint);
+	SetMaxActionPoint(BaseActionPoint);
+	SetDistancePerAP(BaseDistancePerAP);
 }
 
 void UCSWuxiaAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -29,8 +42,6 @@ void UCSWuxiaAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribut
 
 void UCSWuxiaAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
-	Super::PostGameplayEffectExecute( Data );
-
 	Super::PostGameplayEffectExecute(Data);
 	FEffectProperties Props;
 	SetEffectProperties(Data, Props);

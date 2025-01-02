@@ -8,6 +8,10 @@
 #include "AbilitySystem/CSWuxiaAttributeSet.h"
 #include "Components/WidgetComponent.h"
 #include "Data/CharacterRow.h"
+#include "Game/CSWuxiaGameInstance.h"
+#include "Internationalization/StringTable.h"
+#include "Internationalization/StringTableCore.h"
+#include "Internationalization/StringTableRegistry.h"
 
 struct FCharacterRow;
 // Sets default values
@@ -46,33 +50,44 @@ void ACSWuxiaCharacterBase::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("CharacterRowID is None"));
 		return;
 	}
-	UDataRegistrySubsystem* DataRegistrySubsystem = GEngine->GetEngineSubsystem<UDataRegistrySubsystem>();
-
+	const UDataRegistrySubsystem* DataRegistrySubsystem = GEngine->GetEngineSubsystem<UDataRegistrySubsystem>();
 	if (DataRegistrySubsystem)
 	{
 		// 定義要獲取的DataRegistry ID
 		const FDataRegistryId DataId = FDataRegistryId(TEXT("DR_Character"), CharacterRowID);
 
 		// 從Data Registry中獲取已快取的數據
-		const FCharacterRow* CachedData = DataRegistrySubsystem->GetCachedItem<FCharacterRow>( DataId );
-		if (CachedData)
+		if (const FCharacterRow* CachedData = DataRegistrySubsystem->GetCachedItem<FCharacterRow>( DataId ))
 		{
-			if (CachedData)
+			// 處理數據
+			UCSWuxiaAttributeSet* WuxiaAttributeSet = Cast<UCSWuxiaAttributeSet>( AttributeSet );
+			if ( CachedData && WuxiaAttributeSet)
 			{
-				// 處理數據
 				UE_LOG(LogTemp, Log, TEXT("Data retrieved successfully"));
-				// 您可以在此處對CachedData進行進一步處理
-
-				
+				WuxiaAttributeSet->InitializeAttributesFromRow(*CachedData);
 			}
 			else
 			{
-				UE_LOG(LogTemp, Error, TEXT("No cached data found"));
+				UE_LOG(LogTemp, Error, TEXT("Failed to initialize attributes from row"));
 			}
+			const UCSWuxiaGameInstance* WuxiaGameInstance = Cast<UCSWuxiaGameInstance>( GetGameInstance() );
+			const FName StringTableKey = FName( "ST_Character" );
+			DisplayName = WuxiaGameInstance->GetStringTable(StringTableKey, CachedData->NameID.ToString());
+			//TODO 從UE5 Localization System中獲取顯示名稱
+			// if ( const FStringTableConstPtr StringTable = FStringTableRegistry::Get().FindStringTable( StringTableKey ))
+			// {
+			// 	const FText OutDisplayName = FText::FromStringTable( StringTableKey,CachedData->NameID.ToString());
+			// 	// 設置顯示名稱
+			// 	DisplayName = FName(OutDisplayName.ToString());
+			// }
+			// else
+			// {
+			// 	UE_LOG(LogTemp, Error, TEXT("Failed to get string table"));
+			// }
 		}
 		else
 		{
-			UE_LOG(LogTemp, Error, TEXT("Failed to retrieve data from registry"));
+			UE_LOG(LogTemp, Error, TEXT("No cached data found"));
 		}
 	}
 	else
@@ -103,7 +118,6 @@ void ACSWuxiaCharacterBase::BeginPlay()
 void ACSWuxiaCharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 
@@ -120,12 +134,10 @@ void ACSWuxiaCharacterBase::HighlightActor_Implementation()
 {
 	if (GetMesh()->GetOverlayMaterial())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HighlightActor_Implementation: Already OverlayMaterial"));
 		return;
 	}
 	if (UMaterialInstanceDynamic* MaterialInstance = GetOutlineMaterialInstance() )
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HighlightActor_Implementation: MaterialInstance %s"), *MaterialInstance->GetName());
 		GetMesh()->SetOverlayMaterial(MaterialInstance);
 	}
 }
@@ -141,6 +153,11 @@ void ACSWuxiaCharacterBase::UnHighlightActor_Implementation()
 void ACSWuxiaCharacterBase::MoveToLocation_Implementation(FVector& OutLocation)
 {
 	OutLocation = GetActorLocation();
+}
+
+FName ACSWuxiaCharacterBase::GetActorName_Implementation()
+{
+	return DisplayName;
 }
 
 void ACSWuxiaCharacterBase::ShowInteractionWidget_Implementation()

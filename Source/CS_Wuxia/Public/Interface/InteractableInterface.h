@@ -28,5 +28,9 @@ public:
 	void ShowInteractionWidget(); 
 
 	UFUNCTION(BlueprintNativeEvent)
-	void HideInteractionWidget() ;
+	void HideInteractionWidget();
+	
+	UFUNCTION(BlueprintNativeEvent)
+	FName GetActorName();
+	
 };

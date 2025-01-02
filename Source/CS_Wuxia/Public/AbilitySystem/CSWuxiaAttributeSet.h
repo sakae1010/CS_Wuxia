@@ -17,6 +17,8 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+struct FCharacterRow;
+
 USTRUCT()
 struct FEffectProperties
 {
@@ -62,6 +64,8 @@ class CS_WUXIA_API UCSWuxiaAttributeSet : public UAttributeSet
 	GENERATED_BODY()
 public:
 	UCSWuxiaAttributeSet();
+
+	void InitializeAttributesFromRow(const FCharacterRow& CharacterRow);
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
@@ -129,5 +133,11 @@ private:
 	void HandleIncomingDamage(const FEffectProperties& Props) ;
 
 	static void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props);
+
+
+	int BaseActionPoint = 10;
+	//每一AP走的距離
+	float BaseDistancePerAP = 100.f;
+	
 };
 

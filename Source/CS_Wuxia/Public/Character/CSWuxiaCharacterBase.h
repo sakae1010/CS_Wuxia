@@ -26,6 +26,8 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
+	FCharacterRow* GetCharacterRow() const { return CharacterRow; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -58,6 +60,7 @@ public:
 	virtual	void HighlightActor_Implementation() override;
 	virtual void UnHighlightActor_Implementation() override;
 	virtual void MoveToLocation_Implementation(FVector& OutLocation) override;
+	virtual FName GetActorName_Implementation() override;
 	/*  IHightlightInterface  */
 
 
@@ -67,11 +70,13 @@ public:
 	virtual void HideInteractionWidget_Implementation() override;
 	/* IInteractableInterface */
 
-	FCharacterRow* GetCharacterRow() const { return CharacterRow; }
+	
 	
 	
 private:
-	
+
+	// 顯示互動名稱
+	FName DisplayName;
 
 };
 
