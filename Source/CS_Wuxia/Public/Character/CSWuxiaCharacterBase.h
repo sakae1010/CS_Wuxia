@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
+#include "Interface/CombatInterface.h"
 #include "Interface/HightlightInterface.h"
 #include "Interface/InteractableInterface.h"
 #include "CSWuxiaCharacterBase.generated.h"
@@ -14,7 +15,11 @@ struct FCharacterRow;
 class UWidgetComponent;
 
 UCLASS()
-class CS_WUXIA_API ACSWuxiaCharacterBase : public ACharacter ,public IAbilitySystemInterface, public IHightlightInterface  , public IInteractableInterface
+class CS_WUXIA_API ACSWuxiaCharacterBase : public ACharacter ,
+public IAbilitySystemInterface,
+public IHightlightInterface  ,
+public IInteractableInterface,
+public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -70,13 +75,17 @@ public:
 	virtual void HideInteractionWidget_Implementation() override;
 	/* IInteractableInterface */
 
-	
-	
+	/* ICombatInterface */
+	virtual int32 GetPlayerLevel_Implementation() override;
+	/* ICombatInterface */
+protected:
+	UPROPERTY(EditAnywhere, Category = "Character")
+	int32 Level = 1;
 	
 private:
 
 	// 顯示互動名稱
 	FName DisplayName;
-
+	
 };
 

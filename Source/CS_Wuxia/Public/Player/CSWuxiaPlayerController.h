@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "CSWuxiaPlayerController.generated.h"
 
+class UMainProfileWidget;
 class UShowNameWidget;
 class USplineComponent;
 class UNiagaraSystem;
@@ -53,8 +54,10 @@ private:
 	UPROPERTY(EditAnywhere,Category="Input")
 	TObjectPtr<UInputAction> MoveAction;
 	
-	UPROPERTY(EditAnywhere,Category="Input")
+	UPROPERTY(EditAnywhere,Category="UI")
 	TObjectPtr<UShowNameWidget> ShowNameWidget;
+	UPROPERTY(EditAnywhere,Category="UI")
+	TObjectPtr<UMainProfileWidget> MainProfileWidget;
 
 	void InputTagPressed(const FGameplayTag InputTag);
 	void InputTagReleased(const FGameplayTag InputTag);

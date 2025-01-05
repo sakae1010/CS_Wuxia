@@ -9,11 +9,14 @@
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
 #include "NiagaraFunctionLibrary.h"
+#include "AbilitySystem/CSWuxiaAttributeSet.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
+#include "Character/CSWuxiaCharacterBase.h"
 #include "Components/SplineComponent.h"
 #include "Input/CSWuxiaInputComponent.h"
 #include "Interface/HightlightInterface.h"
 #include "Interface/InteractableInterface.h"
+#include "UI/Widget/MainProfileWidget.h"
 #include "UI/Widget/ShowNameWidget.h"
 
 class UNavigationPath;
@@ -31,6 +34,14 @@ void ACSWuxiaPlayerController::BeginPlay()
 	{
 		ShowNameWidget->AddToViewport();
 		ShowNameWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	if (MainProfileWidget)
+	{
+		MainProfileWidget->AddToViewport();
+		//螢幕正上方
+		MainProfileWidget->SetPositionInViewport( FVector2D( 0.5f, 0.5f ) );
+		MainProfileWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 void ACSWuxiaPlayerController::PlayerTick(float DeltaTime)
@@ -185,6 +196,27 @@ void ACSWuxiaPlayerController::ShowActorDisplayName() const
 {
 	if(IsValid(ThisActor)&& ThisActor->Implements<UInteractableInterface>())
 	{
+		if (IsValid(MainProfileWidget))
+		{
+			if (MainProfileWidget->IsVisible())return;
+
+			FProfileData ProfileData;
+			ProfileData.Name = IInteractableInterface::Execute_GetActorName(ThisActor);
+			if( ACSWuxiaCharacterBase* const CharacterBase = Cast<ACSWuxiaCharacterBase>( ThisActor ) )
+			{
+				ProfileData.Level =ICombatInterface::Execute_GetPlayerLevel( CharacterBase );
+				const UAttributeSet* AttributeSet = CharacterBase->GetAttributeSet();
+				ProfileData.Hp = UCSWuxiaAttributeSet::GetHealthAttribute().GetNumericValue( AttributeSet );
+				ProfileData.MaxHp = UCSWuxiaAttributeSet::GetMaxHealthAttribute().GetNumericValue( AttributeSet );
+			}
+			const FIntPoint SizeXY = GetWorld()->GetGameViewport()->Viewport->GetSizeXY();
+			const double X = SizeXY.X * 0.5f - MainProfileWidget->GetDesiredSize().X * 0.5f;
+			
+			MainProfileWidget->SetPositionInViewport(FVector2D(X ,0));
+			MainProfileWidget->ShowActorProfile(ProfileData);
+
+			MainProfileWidget->SetVisibility(ESlateVisibility::Visible);
+		}
 		
 		if(!IsValid(ShowNameWidget))
 		{
@@ -208,6 +240,10 @@ void ACSWuxiaPlayerController::ShowActorDisplayName() const
 	}
 	else
 	{
+		if (IsValid( MainProfileWidget ))
+		{
+			MainProfileWidget->SetVisibility(ESlateVisibility::Hidden);
+		}
 		if(!IsValid(ShowNameWidget))return;
 		ShowNameWidget->SetVisibility(ESlateVisibility::Hidden);
 	}

@@ -45,6 +45,7 @@ void ACSWuxiaCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	GetOutlineMaterialInstance();
+	
 	if (CharacterRowID.IsNone())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("CharacterRowID is None"));
@@ -65,6 +66,7 @@ void ACSWuxiaCharacterBase::BeginPlay()
 			{
 				UE_LOG(LogTemp, Log, TEXT("Data retrieved successfully"));
 				WuxiaAttributeSet->InitializeAttributesFromRow(*CachedData);
+				Level = 1;
 			}
 			else
 			{
@@ -170,4 +172,9 @@ void ACSWuxiaCharacterBase::HideInteractionWidget_Implementation()
 {
 	if (!InteractableWidget)return;
 	InteractableWidget->SetVisibility(false);
+}
+
+int32 ACSWuxiaCharacterBase::GetPlayerLevel_Implementation()
+{
+	return  Level;
 }
